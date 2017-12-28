@@ -16,7 +16,7 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> random
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
                             <form class="form-horizontal form-material" action = "<?= $this->config->base_url(); ?>sys_users/edit_user_exec/<?= $this->uri->segment(3) ?>" method = "POST">
