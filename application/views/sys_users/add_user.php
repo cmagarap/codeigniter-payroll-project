@@ -9,8 +9,6 @@
     <div class="col-md-8 col-xs-10">
         <div class="white-box">
             <form class="form-horizontal form-material" action = "<?= $this->config->base_url(); ?>sys_users/add_sys_user_exec/<?= $this->uri->segment(3) ?>" method = "POST" enctype="multipart/form-data">
-
-
                 <div class="form-group">
                     <label class="col-md-12">Last Name <font color = "red">*</font></label>
                     <div class="col-md-12">
