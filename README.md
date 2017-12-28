@@ -1,1 +1,1 @@
-# payrollProject
+This system is a simple implementation of the Philippine Payroll System as of December 16, 2017 using the PHP web framework CodeIgniter. 

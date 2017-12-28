@@ -75,6 +75,7 @@ class Sys_users extends CI_Controller {
             redirect('payroll/');
         }
     }
+    
     function validate_captcha() {
         $captcha = $this->input->post('g-recaptcha-response');
         $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LfuAzkUAAAAANp8G3aAozm0CKgQaG7I7S0bR2iP=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
