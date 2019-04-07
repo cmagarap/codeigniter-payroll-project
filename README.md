@@ -21,7 +21,7 @@
 1. Open the XAMPP application and start the Apache and MySQL modules (under Actions)
 1. Navigate to http://localhost/phpmyadmin
 1. Create itemdb database and import the development database: `payrollproject/payroll_ci.sql`
-1. In a browser, navigate to http://localhost/project
+1. In a browser, navigate to http://localhost/payrollproject
 
 ## Authors
 
