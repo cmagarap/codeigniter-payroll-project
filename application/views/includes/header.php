@@ -121,7 +121,8 @@ if ($this->session->userdata('type') == "Super Administrator"):
             <ul class="nav navbar-top-links navbar-right pull-left">
                 <li>
                     <a class="profile-pic" href="<?= site_url('profile/'); ?>">
-                        <img src="<?= $this->config->base_url() ?>uploads/<?= $user_image ?>" alt="user-img"
+                        <?php $profile_pic = explode('.', $user_image) ?>
+                        <img src="<?= $this->config->base_url() ?>uploads/<?php echo $profile_pic[0] . '_thumb.' . $profile_pic[1]?>" alt="user-img"
                              width="36" class="img-circle">
                         <b class="hidden-xs">
                             <?= $this->session->userdata('username'); ?>

@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.8.0.1
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2017 at 09:14 AM
--- Server version: 10.1.16-MariaDB
--- PHP Version: 5.6.24
+-- Generation Time: Apr 07, 2019 at 12:21 PM
+-- Server version: 10.1.32-MariaDB
+-- PHP Version: 7.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -357,48 +359,48 @@ CREATE TABLE `user_log` (
 --
 
 INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_and_date`) VALUES
-(1700000236, 'rko', 'Checked employees'' attendance', 'Administrator', 1510881681),
-(1700000237, 'rko', 'Checked employees'' attendance', 'Administrator', 1510881691),
+(1700000236, 'rko', 'Checked employees\' attendance', 'Administrator', 1510881681),
+(1700000237, 'rko', 'Checked employees\' attendance', 'Administrator', 1510881691),
 (1700000238, 'kervin', 'Checked his/her attendance', 'Employee', 1510881889),
 (1700000239, 'kervin', 'Logout', 'Employee', 1510881891),
 (1700000240, 'seej', 'Login', 'Super Administrator', 1510881906),
-(1700000241, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882525),
-(1700000242, 'rko', 'Checked employees'' attendance', 'Administrator', 1510882532),
-(1700000243, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882661),
-(1700000244, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882674),
-(1700000245, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882700),
-(1700000246, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882701),
-(1700000247, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882765),
-(1700000248, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882830),
-(1700000249, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882862),
-(1700000250, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882863),
-(1700000251, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882863),
-(1700000252, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882865),
-(1700000253, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510882880),
-(1700000254, 'rko', 'Checked employees'' attendance', 'Administrator', 1510882889),
-(1700000255, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510883040),
-(1700000256, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510883045),
-(1700000257, 'rko', 'Checked employees'' attendance', 'Administrator', 1510883087),
-(1700000258, 'rko', 'Checked employees'' attendance', 'Administrator', 1510883090),
-(1700000259, 'rko', 'Checked employees'' attendance', 'Administrator', 1510883096),
-(1700000260, 'rko', 'Checked employees'' attendance', 'Administrator', 1510883099),
+(1700000241, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882525),
+(1700000242, 'rko', 'Checked employees\' attendance', 'Administrator', 1510882532),
+(1700000243, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882661),
+(1700000244, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882674),
+(1700000245, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882700),
+(1700000246, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882701),
+(1700000247, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882765),
+(1700000248, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882830),
+(1700000249, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882862),
+(1700000250, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882863),
+(1700000251, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882863),
+(1700000252, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882865),
+(1700000253, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510882880),
+(1700000254, 'rko', 'Checked employees\' attendance', 'Administrator', 1510882889),
+(1700000255, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510883040),
+(1700000256, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510883045),
+(1700000257, 'rko', 'Checked employees\' attendance', 'Administrator', 1510883087),
+(1700000258, 'rko', 'Checked employees\' attendance', 'Administrator', 1510883090),
+(1700000259, 'rko', 'Checked employees\' attendance', 'Administrator', 1510883096),
+(1700000260, 'rko', 'Checked employees\' attendance', 'Administrator', 1510883099),
 (1700000261, 'seej', 'View an admin', 'Super Administrator', 1510883142),
 (1700000262, 'seej', 'View active employees', 'Super Administrator', 1510883153),
-(1700000263, 'rko', 'Checked employees'' attendance', 'Administrator', 1510883487),
+(1700000263, 'rko', 'Checked employees\' attendance', 'Administrator', 1510883487),
 (1700000264, 'seej', 'Logout', 'Super Administrator', 1510884258),
 (1700000265, 'kervin', 'Login', 'Employee', 1510884270),
 (1700000266, 'kervin', 'Checked his/her attendance', 'Employee', 1510884276),
 (1700000267, 'kervin', 'Checked his/her attendance', 'Employee', 1510884548),
 (1700000268, 'kervin', 'Checked his/her attendance', 'Employee', 1510884640),
-(1700000269, 'rko', 'Checked employees'' attendance', 'Administrator', 1510884651),
-(1700000270, 'rko', 'Checked employees'' attendance', 'Administrator', 1510884664),
-(1700000271, 'rko', 'Checked employees'' attendance', 'Administrator', 1510884666),
+(1700000269, 'rko', 'Checked employees\' attendance', 'Administrator', 1510884651),
+(1700000270, 'rko', 'Checked employees\' attendance', 'Administrator', 1510884664),
+(1700000271, 'rko', 'Checked employees\' attendance', 'Administrator', 1510884666),
 (1700000272, 'kervin', 'Checked his/her attendance', 'Employee', 1510884668),
 (1700000273, 'kervin', 'Checked his/her attendance', 'Employee', 1510884669),
-(1700000274, 'rko', 'Checked employees'' attendance', 'Administrator', 1510884677),
+(1700000274, 'rko', 'Checked employees\' attendance', 'Administrator', 1510884677),
 (1700000275, 'kervin', 'Checked his/her attendance', 'Employee', 1510884680),
 (1700000276, 'kervin', 'Checked his/her attendance', 'Employee', 1510886624),
-(1700000277, 'rko', 'Checked employees'' attendance', 'Administrator', 1510886630),
+(1700000277, 'rko', 'Checked employees\' attendance', 'Administrator', 1510886630),
 (1700000278, 'rko', 'Logout', 'Administrator', 1510886634),
 (1700000279, 'seej', 'Login', 'Super Administrator', 1510886641),
 (1700000280, 'kervin', 'Logout', 'Employee', 1510886749),
@@ -425,7 +427,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000301, 'kervin', 'Update Employee Profile', 'Employee', 1510888178),
 (1700000302, 'kervin', 'Checked his/her attendance', 'Employee', 1510888181),
 (1700000303, 'kervin', 'Checked his/her attendance', 'Employee', 1510888456),
-(1700000304, 'punk', 'Checked employees'' attendance', 'Administrator', 1510888461),
+(1700000304, 'punk', 'Checked employees\' attendance', 'Administrator', 1510888461),
 (1700000305, 'kervin', 'Checked his/her attendance', 'Employee', 1510888480),
 (1700000306, 'kervin', 'Checked his/her attendance', 'Employee', 1510888485),
 (1700000307, 'kervin', 'Logout', 'Employee', 1510888552),
@@ -436,8 +438,8 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000312, 'punk', 'Logout', 'Administrator', 1510889263),
 (1700000313, 'alexa', 'Login', 'Employee', 1510889268),
 (1700000314, 'alexa', 'Check in', 'Employee', 1510889270),
-(1700000315, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510889420),
-(1700000316, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510889422),
+(1700000315, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510889420),
+(1700000316, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510889422),
 (1700000317, 'seej', 'Add an admin -- ', 'Super Administrator', 1510890567),
 (1700000318, 'seej', 'Add an admin -- uge', 'Super Administrator', 1510891114),
 (1700000319, 'seej', 'Add an admin -- rex', 'Super Administrator', 1510891226),
@@ -449,14 +451,14 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000325, 'seej', 'Login', 'Super Administrator', 1510891609),
 (1700000326, 'seej', 'Logout', 'Super Administrator', 1510891615),
 (1700000327, 'seej', 'Login', 'Super Administrator', 1510892452),
-(1700000328, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510892505),
-(1700000329, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510894355),
+(1700000328, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510892505),
+(1700000329, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510894355),
 (1700000330, 'seej', 'Login', 'Super Administrator', 1510917335),
-(1700000331, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510917374),
+(1700000331, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510917374),
 (1700000332, 'alexa', 'Login', 'Employee', 1510917494),
 (1700000333, 'alexa', 'Check out', 'Employee', 1510917602),
 (1700000334, 'alexa', 'Checked his/her attendance', 'Employee', 1510917606),
-(1700000335, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510917637),
+(1700000335, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510917637),
 (1700000336, 'seej', 'Delete/Deactivate an admin', 'Super Administrator', 1510918267),
 (1700000337, 'seej', 'Delete/Deactivate an admin', 'Super Administrator', 1510918701),
 (1700000338, 'seej', 'Restore an admin', 'Super Administrator', 1510918869),
@@ -468,7 +470,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000344, 'seej', 'Restore an employee', 'Super Administrator', 1510919227),
 (1700000345, 'seej', 'View active employees', 'Super Administrator', 1510919229),
 (1700000346, 'alexa', 'Logout', 'Employee', 1510919443),
-(1700000347, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510919454),
+(1700000347, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510919454),
 (1700000348, 'seej', 'Add an employee -- lol', 'Super Administrator', 1510921134),
 (1700000349, 'lol', 'Login', 'Employee', 1510921225),
 (1700000350, 'lol', 'Check in', 'Employee', 1510921237),
@@ -528,7 +530,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000404, 'alexa', 'Request for password reset', 'Employee', 1510961659),
 (1700000405, 'seej', 'Add an admin -- sd', 'Super Administrator', 1510964100),
 (1700000406, 'sd', 'Login', 'Administrator', 1510964158),
-(1700000407, 'sd', 'Checked employees'' attendance', 'Administrator', 1510964170),
+(1700000407, 'sd', 'Checked employees\' attendance', 'Administrator', 1510964170),
 (1700000408, 'sd', 'Logout', 'Administrator', 1510964175),
 (1700000409, 'alexa', 'Login', 'Employee', 1510965170),
 (1700000410, 'alexa', 'Logout', 'Employee', 1510965240),
@@ -565,7 +567,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000441, 'alexa', 'Checked his/her attendance', 'Employee', 1510995378),
 (1700000442, 'seej', 'Login', 'Super Administrator', 1510995404),
 (1700000443, 'alexa', 'Logout', 'Employee', 1510995865),
-(1700000444, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1510996561),
+(1700000444, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1510996561),
 (1700000445, 'seej', 'Logout', 'Super Administrator', 1511006907),
 (1700000446, 'seej', 'Login', 'Super Administrator', 1511006915),
 (1700000447, 'alexa', 'Login', 'Employee', 1511007399),
@@ -573,7 +575,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000449, 'andrew', 'Login', 'Employee', 1511007442),
 (1700000450, 'andrew', 'Check out', 'Employee', 1511007444),
 (1700000451, 'andrew', 'Checked his/her attendance', 'Employee', 1511007445),
-(1700000452, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511007457),
+(1700000452, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511007457),
 (1700000453, 'andrew', 'Logout', 'Employee', 1511007596),
 (1700000454, 'punk', 'Login', 'Administrator', 1511007601),
 (1700000455, 'punk', 'Logout', 'Administrator', 1511007805),
@@ -620,23 +622,23 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000496, 'seej', 'Login', 'Super Administrator', 1511059226),
 (1700000497, 'seej', 'Update Profile', 'Super Administrator', 1511059275),
 (1700000498, 'seej', 'Update Profile', 'Super Administrator', 1511059296),
-(1700000499, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059393),
-(1700000500, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059418),
+(1700000499, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059393),
+(1700000500, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059418),
 (1700000501, 'alexa', 'Login', 'Employee', 1511059480),
 (1700000502, 'alexa', 'Check in (Late)', 'Employee', 1511059488),
 (1700000503, 'alexa', 'Checked his/her attendance', 'Employee', 1511059490),
-(1700000504, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059499),
-(1700000505, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059524),
-(1700000506, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059526),
-(1700000507, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059529),
-(1700000508, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059537),
-(1700000509, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059554),
-(1700000510, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059584),
+(1700000504, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059499),
+(1700000505, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059524),
+(1700000506, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059526),
+(1700000507, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059529),
+(1700000508, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059537),
+(1700000509, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059554),
+(1700000510, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059584),
 (1700000511, 'alexa', 'Checked his/her attendance', 'Employee', 1511059600),
 (1700000512, 'alexa', 'Logout', 'Employee', 1511059602),
 (1700000513, 'andrew', 'Login', 'Employee', 1511059607),
 (1700000514, 'andrew', 'Check in (Late)', 'Employee', 1511059614),
-(1700000515, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511059630),
+(1700000515, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511059630),
 (1700000516, 'seej', 'Logout', 'Super Administrator', 1511059732),
 (1700000517, 'seej', 'Login', 'Super Administrator', 1511060039),
 (1700000518, 'andrew', 'Logout', 'Employee', 1511060605),
@@ -652,13 +654,13 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000528, 'alexa', 'Update Employee Profile', 'Employee', 1511102906),
 (1700000529, 'alexa', 'Update Employee Profile', 'Employee', 1511102933),
 (1700000530, 'alexa', 'Update Employee Profile', 'Employee', 1511103139),
-(1700000531, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511103179),
+(1700000531, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511103179),
 (1700000532, 'alexa', 'Logout', 'Employee', 1511103184),
 (1700000533, 'kervine', 'Login', 'Employee', 1511103192),
 (1700000534, 'kervine', 'Check out', 'Employee', 1511103195),
-(1700000535, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511103196),
-(1700000536, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511103202),
-(1700000537, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511103203),
+(1700000535, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511103196),
+(1700000536, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511103202),
+(1700000537, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511103203),
 (1700000538, 'kervine', 'Logout', 'Employee', 1511103208),
 (1700000539, 'andrew', 'Login', 'Employee', 1511103219),
 (1700000540, 'andrew', 'Check out', 'Employee', 1511103221),
@@ -674,36 +676,36 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000550, 'kervine', 'Update Employee Profile', 'Employee', 1511268186),
 (1700000551, 'seej', 'Login', 'Super Administrator', 1511268211),
 (1700000552, 'kervine', 'Logout', 'Employee', 1511268230),
-(1700000553, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511268233),
+(1700000553, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511268233),
 (1700000554, 'alexa', 'Login', 'Employee', 1511268254),
 (1700000555, 'alexa', 'Check in (Late)', 'Employee', 1511268257),
 (1700000556, 'alexa', 'Logout', 'Employee', 1511268281),
 (1700000557, 'andrew', 'Login', 'Employee', 1511268302),
 (1700000558, 'andrew', 'Check in (Late)', 'Employee', 1511268305),
 (1700000559, 'andrew', 'Logout', 'Employee', 1511268311),
-(1700000560, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511268315),
+(1700000560, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511268315),
 (1700000561, 'kervine', 'Login', 'Employee', 1511268327),
 (1700000562, 'kervine', 'Check out', 'Employee', 1511268329),
-(1700000563, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511268333),
+(1700000563, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511268333),
 (1700000564, 'kervine', 'Check out', 'Employee', 1511268451),
-(1700000565, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511268453),
-(1700000566, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511268485),
+(1700000565, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511268453),
+(1700000566, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511268485),
 (1700000567, 'seej', 'Add an employee', 'Super Administrator', 1511277614),
 (1700000568, 'seej', 'Add an employee', 'Super Administrator', 1511277839),
 (1700000569, 'seej', 'View active employees', 'Super Administrator', 1511278213),
 (1700000570, 'seej', 'View active employees', 'Super Administrator', 1511278440),
 (1700000571, 'seej', 'Add an employee -- enzo', 'Super Administrator', 1511278639),
-(1700000572, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511278696),
+(1700000572, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511278696),
 (1700000573, 'kervine', 'Logout', 'Employee', 1511279113),
 (1700000574, 'enzo', 'Login', 'Employee', 1511279128),
 (1700000575, 'enzo', 'Check in (Late)', 'Employee', 1511279144),
 (1700000576, 'enzo', 'Checked his/her attendance', 'Employee', 1511279146),
-(1700000577, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511279168),
+(1700000577, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511279168),
 (1700000578, 'enzo', 'Checked his/her attendance', 'Employee', 1511279275),
-(1700000579, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511279279),
+(1700000579, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511279279),
 (1700000580, 'enzo', 'Check out', 'Employee', 1511279287),
 (1700000581, 'enzo', 'Checked his/her attendance', 'Employee', 1511279288),
-(1700000582, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511279290),
+(1700000582, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511279290),
 (1700000583, 'enzo', 'Checked his/her attendance', 'Employee', 1511279574),
 (1700000584, 'enzo', 'Checked his/her attendance', 'Employee', 1511279986),
 (1700000585, 'enzo', 'Check in (On time)', 'Employee', 1511280595),
@@ -726,7 +728,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000602, 'enzo', 'Check in (On time)', 'Employee', 1511284116),
 (1700000603, 'enzo', 'Check in (On time)', 'Employee', 1511284199),
 (1700000604, 'enzo', 'Check out', 'Employee', 1511284318),
-(1700000605, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511284356),
+(1700000605, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511284356),
 (1700000606, 'enzo', 'Check in (On time)', 'Employee', 1511284447),
 (1700000607, 'enzo', 'Check out', 'Employee', 1511284453),
 (1700000608, 'enzo', 'Check in (On time)', 'Employee', 1511284542),
@@ -750,7 +752,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000626, 'enzo', 'Logout', 'Employee', 1511285923),
 (1700000627, 'enzo', 'Login', 'Employee', 1511285928),
 (1700000628, 'seej', 'Add an admin -- jbjb', 'Super Administrator', 1511286037),
-(1700000629, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511286067),
+(1700000629, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511286067),
 (1700000630, 'seej', 'Add an employee -- kjbjk', 'Super Administrator', 1511286340),
 (1700000631, 'seej', 'View active employees', 'Super Administrator', 1511286343),
 (1700000632, 'seej', 'Add an employee -- nbvm,', 'Super Administrator', 1511286397),
@@ -763,8 +765,8 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000639, 'seej', 'Add an admin -- jkbkj', 'Super Administrator', 1511293846),
 (1700000640, 'seej', 'Login', 'Super Administrator', 1511323170),
 (1700000641, 'seej', 'View active employees', 'Super Administrator', 1511323206),
-(1700000642, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511323212),
-(1700000643, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511323882),
+(1700000642, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511323212),
+(1700000643, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511323882),
 (1700000644, 'punk', 'Login', 'Administrator', 1511323921),
 (1700000645, 'punk', 'Logout', 'Administrator', 1511323924),
 (1700000646, 'alexa', 'Login', 'Employee', 1511323929),
@@ -774,29 +776,29 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000650, 'kervine', 'Logout', 'Employee', 1511323953),
 (1700000651, 'alexa', 'Login', 'Employee', 1511323958),
 (1700000652, 'alexa', 'Check out', 'Employee', 1511323960),
-(1700000653, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511323962),
+(1700000653, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511323962),
 (1700000654, 'alexa', 'Logout', 'Employee', 1511323970),
 (1700000655, 'seej', 'View active employees', 'Super Administrator', 1511323976),
-(1700000656, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511323981),
+(1700000656, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511323981),
 (1700000657, 'andrew', 'Login', 'Employee', 1511323999),
 (1700000658, 'andrew', 'Check in (Late)', 'Employee', 1511324000),
-(1700000659, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324004),
+(1700000659, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324004),
 (1700000660, 'seej', 'View an employee', 'Super Administrator', 1511324053),
-(1700000661, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324116),
-(1700000662, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324123),
-(1700000663, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324127),
-(1700000664, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324130),
-(1700000665, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324284),
-(1700000666, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324288),
-(1700000667, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324300),
-(1700000668, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324301),
-(1700000669, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324304),
-(1700000670, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324349),
-(1700000671, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324353),
-(1700000672, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324356),
-(1700000673, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324365),
-(1700000674, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324371),
-(1700000675, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511324372),
+(1700000661, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324116),
+(1700000662, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324123),
+(1700000663, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324127),
+(1700000664, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324130),
+(1700000665, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324284),
+(1700000666, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324288),
+(1700000667, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324300),
+(1700000668, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324301),
+(1700000669, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324304),
+(1700000670, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324349),
+(1700000671, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324353),
+(1700000672, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324356),
+(1700000673, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324365),
+(1700000674, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324371),
+(1700000675, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511324372),
 (1700000676, 'seej', 'View active employees', 'Super Administrator', 1511324393),
 (1700000677, 'seej', 'View an employee', 'Super Administrator', 1511324396),
 (1700000678, 'joe', 'Add an employee -- romanr', 'Administrator', 1511333868),
@@ -813,7 +815,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000689, 'joe', 'View active employees', 'Administrator', 1511334730),
 (1700000690, 'joe', 'Add an employee -- joshua', 'Administrator', 1511334917),
 (1700000691, 'joe', 'View active employees', 'Administrator', 1511334922),
-(1700000692, 'joe', 'Checked employees'' attendance', 'Administrator', 1511335013),
+(1700000692, 'joe', 'Checked employees\' attendance', 'Administrator', 1511335013),
 (1700000693, 'joe', 'View active employees', 'Administrator', 1511335021),
 (1700000694, 'joe', 'View an employee', 'Administrator', 1511335026),
 (1700000695, 'joe', 'View active employees', 'Administrator', 1511335031),
@@ -899,7 +901,7 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000775, 'punk', 'Edit employee data -- ', 'Administrator', 1511402675),
 (1700000776, 'punk', 'View active employees', 'Administrator', 1511402677),
 (1700000777, 'seej', 'View active employees', 'Super Administrator', 1511402690),
-(1700000778, 'seej', 'Checked employees'' attendance', 'Super Administrator', 1511402696),
+(1700000778, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1511402696),
 (1700000779, 'punk', 'Logout', 'Administrator', 1511402702),
 (1700000780, 'kervine', 'Login', 'Employee', 1511402714),
 (1700000781, 'kervine', 'Check in (Late)', 'Employee', 1511402717),
@@ -979,7 +981,22 @@ INSERT INTO `user_log` (`userlog_id`, `username`, `action`, `user_type`, `time_a
 (1700000855, 'seej', 'Edit employee data', 'Super Administrator', 1511511166),
 (1700000856, 'seej', 'View active employees', 'Super Administrator', 1511511168),
 (1700000857, 'seej', 'View an employee', 'Super Administrator', 1511511173),
-(1700000858, 'seej', 'Logout', 'Super Administrator', 1511511185);
+(1700000858, 'seej', 'Logout', 'Super Administrator', 1511511185),
+(1700000859, 'seej', 'Login', 'Super Administrator', 1536890823),
+(1700000860, 'seej', 'Update Profile', 'Super Administrator', 1536890946),
+(1700000861, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1536890961),
+(1700000862, 'seej', 'Logout', 'Super Administrator', 1536890973),
+(1700000863, 'seej', 'Login', 'Super Administrator', 1536890979),
+(1700000864, 'seej', 'Checked employees\' attendance', 'Super Administrator', 1536890996),
+(1700000865, 'seej', 'View active employees', 'Super Administrator', 1536891014),
+(1700000866, 'seej', 'Logout', 'Super Administrator', 1536891770),
+(1700000867, 'seej', 'Login', 'Super Administrator', 1536951009),
+(1700000868, 'seej', 'Logout', 'Super Administrator', 1536951016),
+(1700000869, 'seej', 'Login', 'Super Administrator', 1554631848),
+(1700000870, 'seej', 'Logout', 'Super Administrator', 1554632104),
+(1700000871, 'seej', 'Login', 'Super Administrator', 1554632111),
+(1700000872, 'seej', 'View active employees', 'Super Administrator', 1554632421),
+(1700000873, 'seej', 'Logout', 'Super Administrator', 1554632440);
 
 --
 -- Indexes for dumped tables
@@ -1051,46 +1068,55 @@ ALTER TABLE `user_log`
 --
 ALTER TABLE `attendance`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1700000086;
+
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
   MODIFY `emp_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20170021;
+
 --
 -- AUTO_INCREMENT for table `pagibigcontribution`
 --
 ALTER TABLE `pagibigcontribution`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `philhealthcontribution`
 --
 ALTER TABLE `philhealthcontribution`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
 --
 -- AUTO_INCREMENT for table `ssscontribution`
 --
 ALTER TABLE `ssscontribution`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
 --
 -- AUTO_INCREMENT for table `sub_admin`
 --
 ALTER TABLE `sub_admin`
   MODIFY `admin_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2170011;
+
 --
 -- AUTO_INCREMENT for table `super_admin`
 --
 ALTER TABLE `super_admin`
   MODIFY `s_admin_id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1701;
+
 --
 -- AUTO_INCREMENT for table `tbl_payroll`
 --
 ALTER TABLE `tbl_payroll`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 --
 -- AUTO_INCREMENT for table `user_log`
 --
 ALTER TABLE `user_log`
-  MODIFY `userlog_id` int(12) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1700000859;
+  MODIFY `userlog_id` int(12) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1700000874;
+
 --
 -- Constraints for dumped tables
 --
@@ -1101,6 +1127,7 @@ ALTER TABLE `user_log`
 ALTER TABLE `tbl_payroll`
   ADD CONSTRAINT `tbl_payroll_fk_1` FOREIGN KEY (`emp_username`) REFERENCES `employees` (`emp_username`),
   ADD CONSTRAINT `tbl_payroll_ibfk_1` FOREIGN KEY (`emp_username`) REFERENCES `employees` (`emp_username`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
