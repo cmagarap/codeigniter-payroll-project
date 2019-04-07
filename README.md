@@ -20,7 +20,7 @@
 1. Move the repository folder to the `/xampp/htdocs/` folder on your local hard drive
 1. Open the XAMPP application and start the Apache and MySQL modules (under Actions)
 1. Navigate to http://localhost/phpmyadmin
-1. Create itemdb database and import the development database: `payrollproject/payroll_ci.sql`
+1. Create payroll_ci database and import the development database: `payrollproject/payroll_ci.sql`
 1. In a browser, navigate to http://localhost/payrollproject
 
 ## Authors
