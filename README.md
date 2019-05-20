@@ -25,7 +25,7 @@
 
 ## Authors
 
-* [Chris John Agarap](https://github.com/Seej11010)
+* [Chris John Agarap](https://github.com/seeej)
 * Rex Christian Baldonado
 * Andew Cyle Leona
 * Kervin Rollan
