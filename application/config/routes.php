@@ -52,3 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'payroll';
 $route['404_override'] = 'payroll404';
 $route['translate_uri_dashes'] = FALSE;
+$route['employeeapi/getEmployees']   = 'employeeapi/getEmployees';
+$route['employeeapi/addEmployee']    = 'employeeapi/addEmployee';
+$route['employeeapi/updateEmployee'] = 'employeeapi/updateEmployee';
+$route['employeeapi/deleteEmployee'] = 'employeeapi/deleteEmployee';
