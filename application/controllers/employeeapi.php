@@ -67,4 +67,55 @@ class Employeeapi extends CI_Controller {
             echo json_encode(["status" => "error"]);
         }
     }
+    public function updateGovNumbers() {
+        $this->load->database();
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        $employee = array(
+            'tin_num'        => $data['tin_num'],
+            'sss_num'        => $data['sss_num'],
+            'pagibig_num'    => $data['pagibig_num'],
+            'philhealth_num' => $data['philhealth_num']
+        );
+
+        $this->db->where('emp_id', $data['emp_id']);
+        $this->db->update('employees', $employee);
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error"]);
+        }
+    }
+    public function getPayroll() {
+    $this->load->database();
+    $data = json_decode(file_get_contents("php://input"), true);
+    $query = $this->db->get_where('tbl_payroll', 
+        array('emp_username' => $data['emp_username']));
+    echo json_encode($query->result());
+}
+
+    public function addPayroll() {
+        $this->load->database();
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        $payroll = array(
+            'emp_username'    => $data['emp_username'],
+            'gross_salary'    => $data['gross_salary'],
+            'sss'             => $data['sss'],
+            'philhealth'      => $data['philhealth'],
+            'pagibig'         => $data['pagibig'],
+            'wtax'            => $data['wtax'],
+            'other_deduction' => $data['other_deduction'],
+            'net_pay'         => $data['net_pay']
+        );
+    
+        $this->db->insert('tbl_payroll', $payroll);
+    
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error"]);
+        }
+    }
 }
