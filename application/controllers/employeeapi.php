@@ -22,7 +22,8 @@ class Employeeapi extends CI_Controller {
             'position'       => $data['position'],
             'department'     => $data['department'],
             'gross_salary'   => $data['gross_salary'],
-            'emp_sys_status' => 1
+            'emp_sys_status' => 1,
+            'emp_password'   => password_hash('password', PASSWORD_BCRYPT)
         );
         $this->db->insert('employees', $employee);
         if ($this->db->affected_rows() > 0) {
