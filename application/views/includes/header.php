@@ -120,14 +120,20 @@ if ($this->session->userdata('type') == "Super Administrator"):
             <!-- /Logo -->
             <ul class="nav navbar-top-links navbar-right pull-left">
                 <li>
-                    <a class="profile-pic" href="<?= site_url('profile/'); ?>">
-                        <?php $profile_pic = explode('.', $user_image) ?>
-                        <img src="<?= $this->config->base_url() ?>uploads/<?php echo $profile_pic[0] . '_thumb.' . $profile_pic[1]?>" alt="user-img"
-                             width="36" class="img-circle">
-                        <b class="hidden-xs">
-                            <?= $this->session->userdata('username'); ?>
-                        </b>
-                    </a>
+                   <a class="profile-pic" href="<?= site_url('profile/'); ?>">
+    <?php 
+    if(!empty($user_image) && strpos($user_image, '.') !== false) {
+        $profile_pic = explode('.', $user_image);
+        $img_src = $this->config->base_url() . 'uploads/' . $profile_pic[0] . '_thumb.' . $profile_pic[1];
+    } else {
+        $img_src = $this->config->base_url() . 'uploads/default.png';
+    }
+    ?>
+    <img src="<?= $img_src ?>" alt="user-img" width="36" class="img-circle">
+    <b class="hidden-xs">
+        <?= $this->session->userdata('username'); ?>
+    </b>
+</a>
                 </li>
             </ul>
             <ul class="nav navbar-top-links navbar-right pull-right">
