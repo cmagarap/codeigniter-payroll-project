@@ -98,7 +98,7 @@ class Employeeapi extends CI_Controller {
     public function addPayroll() {
         $this->load->database();
         $data = json_decode(file_get_contents("php://input"), true);
-    
+
         $payroll = array(
             'emp_username'    => $data['emp_username'],
             'gross_salary'    => $data['gross_salary'],
@@ -109,8 +109,39 @@ class Employeeapi extends CI_Controller {
             'other_deduction' => $data['other_deduction'],
             'net_pay'         => $data['net_pay']
         );
-    
+
         $this->db->insert('tbl_payroll', $payroll);
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error"]);
+        }
+    }
+    public function getAttendance() {
+    $this->load->database();
+    $data = json_decode(file_get_contents("php://input"), true);
+    $query = $this->db->get_where('attendance',
+        array('emp_id' => $data['emp_id']));
+    echo json_encode($query->result());
+}
+
+    public function addAttendance() {
+        $this->load->database();
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        $attendance = array(
+            'username'  => $data['username'],
+            'lastname'  => $data['lastname'],
+            'firstname' => $data['firstname'],
+            'emp_id'    => $data['emp_id'],
+            'time_in'   => $data['time_in'],
+            'time_out'  => $data['time_out'],
+            'status'    => $data['status'],
+            'date'      => $data['date']
+        );
+    
+        $this->db->insert('attendance', $attendance);
     
         if ($this->db->affected_rows() > 0) {
             echo json_encode(["status" => "success"]);
