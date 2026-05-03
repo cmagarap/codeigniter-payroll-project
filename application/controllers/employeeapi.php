@@ -251,3 +251,36 @@ class Employeeapi extends CI_Controller {
         }
     }
 }
+public function getContributions() {
+    $this->load->database();
+    $data = json_decode(file_get_contents("php://input"), true);
+    $gross = $data['gross_salary'];
+
+    // Get SSS
+    $sss = $this->db
+        ->where('range_from <=', $gross)
+        ->where('range_to >=', $gross)
+        ->get('ssscontribution')
+        ->row();
+
+    // Get Philhealth
+    $philhealth = $this->db
+        ->where('range_from <=', $gross)
+        ->where('range_to >=', $gross)
+        ->get('philhealthcontribution')
+        ->row();
+
+    // Get Pagibig
+    $pagibig = $this->db
+        ->where('range_from <=', $gross)
+        ->where('range_to >=', $gross)
+        ->get('pagibigcontribution')
+        ->row();
+
+    echo json_encode([
+        "status"     => "success",
+        "sss"        => $sss ? $sss->employee_share : 0,
+        "philhealth" => $philhealth ? $philhealth->employee_share : 0,
+        "pagibig"    => $pagibig ? $pagibig->employee_share : 0
+    ]);
+}
