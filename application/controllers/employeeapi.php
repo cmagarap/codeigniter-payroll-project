@@ -250,16 +250,15 @@ class Employeeapi extends CI_Controller {
             echo json_encode(["status" => "error"]);
         }
     }
-}
-public function getContributions() {
+    public function getContributions() {
     $this->load->database();
     $data = json_decode(file_get_contents("php://input"), true);
     $gross = $data['gross_salary'];
 
     // Get SSS
     $sss = $this->db
-        ->where('range_from <=', $gross)
-        ->where('range_to >=', $gross)
+        ->where('salary_range_from <=', $gross)
+        ->where('salary_range_to >=', $gross)
         ->get('ssscontribution')
         ->row();
 
@@ -283,4 +282,5 @@ public function getContributions() {
         "philhealth" => $philhealth ? $philhealth->employee_share : 0,
         "pagibig"    => $pagibig ? $pagibig->employee_share : 0
     ]);
+}
 }
