@@ -64,6 +64,32 @@ class Payroll extends CI_Controller {
     }
 
 	public function login_submit() {
+        // =====================
+        // RATE LIMITING
+        // =====================
+        $ip = $this->input->ip_address();
+        $time = time();
+        $minute_ago = $time - 60;
+    
+        // Count login attempts in last minute
+        $this->db->where('ip', $ip)
+                 ->where('time >', $minute_ago)
+                 ->where('endpoint', 'payroll/login_submit');
+        $count = $this->db->count_all_results('api_requests');
+    
+        if ($count >= 5) {
+            $this->session->set_flashdata('error', 
+                'Too many login attempts. Please wait 1 minute and try again.');
+            $this->index();
+            return;
+        }
+    
+        // Log this login attempt
+        $this->db->insert('api_requests', [
+            'ip'       => $ip,
+            'time'     => $time,
+            'endpoint' => 'payroll/login_submit'
+        ]);
         $this->load->helper('form');
         $this->load->library('form_validation');
 	    $this->form_validation->set_rules('tf_username', 'Username', 'required');

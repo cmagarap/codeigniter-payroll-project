@@ -9,15 +9,11 @@ class Employeeapi extends CI_Controller {
         $this->_rateLimit();
     }
 
-    // =====================
-    // RATE LIMITING
-    // =====================
     private function _rateLimit() {
         $ip = $this->input->ip_address();
         $time = time();
         $minute_ago = $time - 60;
 
-        // Count requests in last minute
         $count = $this->db
             ->where('ip', $ip)
             ->where('time >', $minute_ago)
@@ -32,7 +28,6 @@ class Employeeapi extends CI_Controller {
             exit();
         }
 
-        // Log this request
         $this->db->insert('api_requests', [
             'ip'       => $ip,
             'time'     => $time,
@@ -40,77 +35,21 @@ class Employeeapi extends CI_Controller {
         ]);
     }
 
-    // =====================
-    // ENCRYPTION HELPERS
-    // =====================
- 
-    private $cipher = 'AES-256-CBC';
-    private $key = 'P@yr0llS3cur3K3y#EmpMgmt2026!!X';
-    
-    private function _encrypt($value) {
-        if (!$value) return '';
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->cipher));
-        $encrypted = openssl_encrypt($value, $this->cipher, $this->key, 0, $iv);
-        return base64_encode($iv . $encrypted);
-    }
-    
-    private function _decrypt($value) {
-        if (!$value) return '';
-        try {
-            $data = base64_decode($value);
-            $iv_length = openssl_cipher_iv_length($this->cipher);
-            // Check if data is long enough to be encrypted
-            if (strlen($data) <= $iv_length) {
-                return $value; // return as plain text
-            }
-            $iv = substr($data, 0, $iv_length);
-            $encrypted = substr($data, $iv_length);
-            $decrypted = openssl_decrypt($encrypted, $this->cipher, $this->key, 0, $iv);
-            // If decryption fails return original value
-            return $decrypted !== false ? $decrypted : $value;
-        } catch (Exception $e) {
-            return $value;
-        }
-    }
-
-    private function _decryptEmployee($emp) {
-        $emp->emp_firstname   = $this->_decrypt($emp->emp_firstname);
-        $emp->emp_lastname    = $this->_decrypt($emp->emp_lastname);
-        $emp->emp_middlename  = $this->_decrypt($emp->emp_middlename);
-        $emp->emp_email       = $this->_decrypt($emp->emp_email);
-        $emp->emp_contact     = $this->_decrypt($emp->emp_contact);
-        $emp->tin_num         = $this->_decrypt($emp->tin_num);
-        $emp->sss_num         = $this->_decrypt($emp->sss_num);
-        $emp->pagibig_num     = $this->_decrypt($emp->pagibig_num);
-        $emp->philhealth_num  = $this->_decrypt($emp->philhealth_num);
-        return $emp;
-    }
-
-    // =====================
-    // EMPLOYEE ENDPOINTS
-    // =====================
     public function getEmployees() {
         $query = $this->db->get('employees');
-        $employees = $query->result();
-
-        // Decrypt PII for each employee
-        foreach ($employees as &$emp) {
-            $emp = $this->_decryptEmployee($emp);
-        }
-
-        echo json_encode($employees);
+        echo json_encode($query->result());
     }
 
     public function addEmployee() {
         $data = json_decode(file_get_contents("php://input"), true);
 
         $employee = array(
-            'emp_firstname'  => $this->_encrypt($data['emp_firstname']),
-            'emp_lastname'   => $this->_encrypt($data['emp_lastname']),
-            'emp_middlename' => $this->_encrypt($data['emp_middlename']),
+            'emp_firstname'  => $data['emp_firstname'],
+            'emp_lastname'   => $data['emp_lastname'],
+            'emp_middlename' => $data['emp_middlename'],
             'emp_username'   => $data['emp_username'],
-            'emp_email'      => $this->_encrypt($data['emp_email']),
-            'emp_contact'    => $this->_encrypt($data['emp_contact']),
+            'emp_email'      => $data['emp_email'],
+            'emp_contact'    => $data['emp_contact'],
             'position'       => $data['position'],
             'department'     => $data['department'],
             'gross_salary'   => $data['gross_salary'],
@@ -131,12 +70,12 @@ class Employeeapi extends CI_Controller {
         $data = json_decode(file_get_contents("php://input"), true);
 
         $employee = array(
-            'emp_firstname'  => $this->_encrypt($data['emp_firstname']),
-            'emp_lastname'   => $this->_encrypt($data['emp_lastname']),
-            'emp_middlename' => $this->_encrypt($data['emp_middlename']),
+            'emp_firstname'  => $data['emp_firstname'],
+            'emp_lastname'   => $data['emp_lastname'],
+            'emp_middlename' => $data['emp_middlename'],
             'emp_username'   => $data['emp_username'],
-            'emp_email'      => $this->_encrypt($data['emp_email']),
-            'emp_contact'    => $this->_encrypt($data['emp_contact']),
+            'emp_email'      => $data['emp_email'],
+            'emp_contact'    => $data['emp_contact'],
             'position'       => $data['position'],
             'department'     => $data['department'],
             'gross_salary'   => $data['gross_salary']
@@ -169,10 +108,10 @@ class Employeeapi extends CI_Controller {
         $data = json_decode(file_get_contents("php://input"), true);
 
         $employee = array(
-            'tin_num'        => $this->_encrypt($data['tin_num']),
-            'sss_num'        => $this->_encrypt($data['sss_num']),
-            'pagibig_num'    => $this->_encrypt($data['pagibig_num']),
-            'philhealth_num' => $this->_encrypt($data['philhealth_num'])
+            'tin_num'        => $data['tin_num'],
+            'sss_num'        => $data['sss_num'],
+            'pagibig_num'    => $data['pagibig_num'],
+            'philhealth_num' => $data['philhealth_num']
         );
 
         $this->db->where('emp_id', $data['emp_id']);
@@ -185,9 +124,6 @@ class Employeeapi extends CI_Controller {
         }
     }
 
-    // =====================
-    // PAYROLL ENDPOINTS
-    // =====================
     public function getPayroll() {
         $data = json_decode(file_get_contents("php://input"), true);
         $query = $this->db->get_where('tbl_payroll',
@@ -218,9 +154,6 @@ class Employeeapi extends CI_Controller {
         }
     }
 
-    // =====================
-    // ATTENDANCE ENDPOINTS
-    // =====================
     public function getAttendance() {
         $data = json_decode(file_get_contents("php://input"), true);
         $query = $this->db->get_where('attendance',
@@ -250,37 +183,75 @@ class Employeeapi extends CI_Controller {
             echo json_encode(["status" => "error"]);
         }
     }
+
     public function getContributions() {
-    $this->load->database();
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (!$data || !isset($data['gross_salary'])) {
+            echo json_encode(["status" => "error", "message" => "No data provided"]);
+            return;
+        }
+
+        $gross = $data['gross_salary'];
+
+        $sss = $this->db
+            ->where('salary_range_from <=', $gross)
+            ->where('salary_range_to >=', $gross)
+            ->get('ssscontribution')
+            ->row();
+
+        $philhealth = $this->db
+            ->where('range_from <=', $gross)
+            ->where('range_to >=', $gross)
+            ->get('philhealthcontribution')
+            ->row();
+
+        $pagibig = $this->db
+            ->where('range_from <=', $gross)
+            ->where('range_to >=', $gross)
+            ->get('pagibigcontribution')
+            ->row();
+
+        echo json_encode([
+            "status"     => "success",
+            "sss"        => $sss ? $sss->employee_share : 0,
+            "philhealth" => $philhealth ? $philhealth->employee_share : 0,
+            "pagibig"    => $pagibig ? $pagibig->employee_share : 0
+        ]);
+    }
+    public function updatePayroll() {
     $data = json_decode(file_get_contents("php://input"), true);
-    $gross = $data['gross_salary'];
 
-    // Get SSS
-    $sss = $this->db
-        ->where('salary_range_from <=', $gross)
-        ->where('salary_range_to >=', $gross)
-        ->get('ssscontribution')
-        ->row();
+    $payroll = array(
+        'gross_salary'    => $data['gross_salary'],
+        'sss'             => $data['sss'],
+        'philhealth'      => $data['philhealth'],
+        'pagibig'         => $data['pagibig'],
+        'wtax'            => $data['wtax'],
+        'other_deduction' => $data['other_deduction'],
+        'net_pay'         => $data['net_pay']
+    );
 
-    // Get Philhealth
-    $philhealth = $this->db
-        ->where('range_from <=', $gross)
-        ->where('range_to >=', $gross)
-        ->get('philhealthcontribution')
-        ->row();
+    $this->db->where('id', $data['id']);
+    $this->db->update('tbl_payroll', $payroll);
 
-    // Get Pagibig
-    $pagibig = $this->db
-        ->where('range_from <=', $gross)
-        ->where('range_to >=', $gross)
-        ->get('pagibigcontribution')
-        ->row();
+    if ($this->db->affected_rows() > 0) {
+        echo json_encode(["status" => "success"]);
+    } else {
+        echo json_encode(["status" => "error"]);
+    }
+}
 
-    echo json_encode([
-        "status"     => "success",
-        "sss"        => $sss ? $sss->employee_share : 0,
-        "philhealth" => $philhealth ? $philhealth->employee_share : 0,
-        "pagibig"    => $pagibig ? $pagibig->employee_share : 0
-    ]);
+public function deletePayroll() {
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $this->db->where('id', $data['id']);
+    $this->db->delete('tbl_payroll');
+
+    if ($this->db->affected_rows() > 0) {
+        echo json_encode(["status" => "success"]);
+    } else {
+        echo json_encode(["status" => "error"]);
+    }
 }
 }

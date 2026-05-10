@@ -62,3 +62,5 @@ $route['employeeapi/addPayroll'] = 'employeeapi/addPayroll';
 $route['employeeapi/getAttendance'] = 'employeeapi/getAttendance';
 $route['employeeapi/addAttendance'] = 'employeeapi/addAttendance';
 $route['employeeapi/getContributions'] = 'employeeapi/getContributions';
+$route['employeeapi/updatePayroll'] = 'employeeapi/updatePayroll';
+$route['employeeapi/deletePayroll'] = 'employeeapi/deletePayroll';

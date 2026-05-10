@@ -8,20 +8,67 @@ class Employees extends CI_Controller {
         $this->load->helper(array('string', 'form'));
         $this->load->library(array('form_validation', 'session', 'email'));
     }
+    private function _encrypt($value) {
+        $cipher = 'AES-256-CBC';
+        $key = 'P@yr0llS3cur3K3y#EmpMgmt2026!!X';
+        if (!$value) return '';
+        $iv_length = openssl_cipher_iv_length($cipher);
+        $iv = openssl_random_pseudo_bytes($iv_length);
+        $encrypted = openssl_encrypt($value, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        return 'ENC:' . base64_encode($iv . $encrypted);
+    }
 
+    private function _decrypt($value) {
+        $cipher = 'AES-256-CBC';
+        $key = 'P@yr0llS3cur3K3y#EmpMgmt2026!!X';
+        if (!$value) return '';
+        if (substr($value, 0, 4) !== 'ENC:') return $value;
+        $data = base64_decode(substr($value, 4));
+        $iv_length = openssl_cipher_iv_length($cipher);
+        if (strlen($data) <= $iv_length) return $value;
+        $iv = substr($data, 0, $iv_length);
+        $encrypted = substr($data, $iv_length);
+        $decrypted = openssl_decrypt($encrypted, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        return $decrypted !== false ? $decrypted : $value;
+    }
     public function index() {
-        if($this->session->userdata('type') == "Super Administrator" OR $this->session->userdata('type') == "Administrator") {
+            if($this->session->userdata('type') == "Super Administrator" OR 
+           $this->session->userdata('type') == "Administrator") {
+
             $this->db->order_by('emp_lastname', 'ASC');
             $activeEmp = $this->item_model->fetch('employees', array("emp_sys_status" => true));
             $this->db->order_by('emp_lastname', 'ASC');
             $inactiveEmp = $this->item_model->fetch('employees', array("emp_sys_status" => false));
+
+            // Decrypt PII for active employees
+            if ($activeEmp) {
+                foreach ($activeEmp as &$emp) {
+                    $emp->emp_firstname  = $this->_decrypt($emp->emp_firstname);
+                    $emp->emp_lastname   = $this->_decrypt($emp->emp_lastname);
+                    $emp->emp_middlename = $this->_decrypt($emp->emp_middlename);
+                    $emp->emp_email      = $this->_decrypt($emp->emp_email);
+                    $emp->emp_contact    = $this->_decrypt($emp->emp_contact);
+                }
+            }
+
+            // Decrypt PII for inactive employees
+            if ($inactiveEmp) {
+                foreach ($inactiveEmp as &$emp) {
+                    $emp->emp_firstname  = $this->_decrypt($emp->emp_firstname);
+                    $emp->emp_lastname   = $this->_decrypt($emp->emp_lastname);
+                    $emp->emp_middlename = $this->_decrypt($emp->emp_middlename);
+                    $emp->emp_email      = $this->_decrypt($emp->emp_email);
+                    $emp->emp_contact    = $this->_decrypt($emp->emp_contact);
+                }
+            }
+
             $data = array(
-                'title' => 'Payroll | Employees',
-                'heading' => 'Employee Data',
-                'side' => 'Employees',
-                'user' => $this->session->userdata('type'),
-                'user_image' => $this->session->userdata('image'),
-                'active_emp' => $activeEmp,
+                'title'        => 'Payroll | Employees',
+                'heading'      => 'Employee Data',
+                'side'         => 'Employees',
+                'user'         => $this->session->userdata('type'),
+                'user_image'   => $this->session->userdata('image'),
+                'active_emp'   => $activeEmp,
                 'inactive_emp' => $inactiveEmp
             );
             $this->load->view('includes/header', $data);
@@ -116,17 +163,17 @@ class Employees extends CI_Controller {
                 }
                 $user = $this->input->post('tf_emp_username');
                 $data = array(
-                    'emp_username' => trim($user),
-                    'emp_password' => password_hash($this->input->post('pf_emp_password'), PASSWORD_BCRYPT),
-                    'emp_lastname' => trim(ucwords($this->input->post('tf_emp_lastname'))),
-                    'emp_firstname' => trim(ucwords($this->input->post('tf_emp_firstname'))),
-                    'emp_middlename' => trim(ucwords($this->input->post('tf_emp_middlename'))),
-                    'emp_email' => trim($this->input->post('tf_emp_email')),
-                    'emp_contact' => trim($this->input->post('tf_emp_phone')),
-                    'tin_num' => trim($this->input->post('tf_emp_tin')),
-                    'sss_num' => trim($this->input->post('tf_emp_sss')),
-                    'pagibig_num' => trim($this->input->post('tf_emp_pagibig')),
-                    'philhealth_num' => trim($this->input->post('tf_emp_phealth')),
+                    'emp_username'   => trim($user),
+                    'emp_password'   => password_hash($this->input->post('pf_emp_password'), PASSWORD_BCRYPT),
+                    'emp_lastname'   => $this->_encrypt(trim(ucwords($this->input->post('tf_emp_lastname')))),
+                    'emp_firstname'  => $this->_encrypt(trim(ucwords($this->input->post('tf_emp_firstname')))),
+                    'emp_middlename' => $this->_encrypt(trim(ucwords($this->input->post('tf_emp_middlename')))),
+                    'emp_email'      => $this->_encrypt(trim($this->input->post('tf_emp_email'))),
+                    'emp_contact'    => $this->_encrypt(trim($this->input->post('tf_emp_phone'))),
+                    'tin_num'        => $this->_encrypt(trim($this->input->post('tf_emp_tin'))),
+                    'sss_num'        => $this->_encrypt(trim($this->input->post('tf_emp_sss'))),
+                    'pagibig_num'    => $this->_encrypt(trim($this->input->post('tf_emp_pagibig'))),
+                    'philhealth_num' => $this->_encrypt(trim($this->input->post('tf_emp_phealth'))),
                     'status' => trim($this->input->post('s_status')),
                     'gross_salary' => trim($this->input->post('tf_emp_gsalary')),
                     'position' => trim(ucwords($this->input->post('tf_emp_position'))),
@@ -293,13 +340,23 @@ class Employees extends CI_Controller {
     # PROFILE OF THE EMPLOYEE WHO IS CURRENTLY LOGGED IN
     public function profile_emp() {
         if($this->session->userdata('type') == "Employee") {
-            $account = $this->item_model->fetch('employees', array('emp_id' => $this->session->userdata('id')));
+            $account = $this->item_model->fetch('employees', 
+                array('emp_id' => $this->session->userdata('id')));
+
+            if ($account && count($account) > 0) {
+                $account[0]->emp_firstname   = $this->_decrypt($account[0]->emp_firstname);
+                $account[0]->emp_lastname    = $this->_decrypt($account[0]->emp_lastname);
+                $account[0]->emp_middlename  = $this->_decrypt($account[0]->emp_middlename);
+                $account[0]->emp_email       = $this->_decrypt($account[0]->emp_email);
+                $account[0]->emp_contact     = $this->_decrypt($account[0]->emp_contact);
+            }
+
             $data = array(
-                'title' => 'Payroll | Profile',
-                'heading' => 'My Profile',
-                'side' => 'Profile Page',
-                'user' => 'Employee',
-                'employees' => $account,
+                'title'      => 'Payroll | Profile',
+                'heading'    => 'My Profile',
+                'side'       => 'Profile Page',
+                'user'       => 'Employee',
+                'employees'  => $account,
                 'user_image' => $this->session->userdata('image')
             );
             $this->load->view('includes/header', $data);
