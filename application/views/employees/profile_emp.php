@@ -1,5 +1,5 @@
 <!-- .row -->
-<?php $employees = $employees[0]; ?>
+<?php $employees = is_array($employees) ? (object)$employees[0] : $employees[0]; ?>
 <div class="row">
     <div class="col-md-4 col-xs-12">
         <div class="white-box" style = "background-color: #2f313e">
@@ -55,7 +55,7 @@
                         $time = date('H:i:s');
                         $date = date('Y/m/d');
                         $attendance = $this->item_model->fetch("attendance", array('username' => $this->session->userdata('username'), 'emp_id' => $this->session->userdata('id'), 'date' => $date));
-                        $attendance = $attendance[0];
+                       $attendance = !empty($attendance) ? $attendance[0] : null;
 
                         if($attendance) {
                             # SHOULD UPDATE OTHER DEDUCTIONS/INCOME BASED ON THE TIME CHECKED IN and OUT

@@ -442,59 +442,81 @@ class Employees extends CI_Controller {
         }
     }
     public function update_profile() {
-        if($this->session->userdata('type') == "Employee") {
-            $this->form_validation->set_rules('tf_emp_lastname', 'Last name', 'required');
-            $this->form_validation->set_rules('tf_emp_firstname', 'First name', 'required');
-            $this->form_validation->set_rules('tf_emp_email', 'Email', 'required|valid_email');
-            $this->form_validation->set_rules('tf_emp_phone_no', 'Phone No.', 'required|numeric');
-            $this->form_validation->set_message('required', 'Please fill out the {field} field.');
+    if($this->session->userdata('type') == "Employee") {
+        $this->form_validation->set_rules('tf_emp_lastname', 'Last name', 'required');
+        $this->form_validation->set_rules('tf_emp_firstname', 'First name', 'required');
+        $this->form_validation->set_rules('tf_emp_email', 'Email', 'required|valid_email');
+        $this->form_validation->set_rules('tf_emp_phone_no', 'Phone No.', 'required|numeric');
+        $this->form_validation->set_message('required', 'Please fill out the {field} field.');
 
-            if ($this->form_validation->run()) {
-                $config['upload_path'] = './uploads_employee/';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = 0;
-                $this->load->library('upload', $config);
-                # Check for image input
-                if ($this->upload->do_upload('profile_pic') == TRUE) {
-                    $image = $this->upload->data('file_name');
-                    $config2['image_library'] = 'gd2';
-                    $config2['source_image'] = './uploads_employee/' . $image;
-                    $config2['create_thumb'] = TRUE;
-                    $config2['maintain_ratio'] = TRUE;
-                    $config2['width'] = 75;
-                    $config2['height'] = 50;
-                    $this->load->library('image_lib', $config2);
-                    $this->image_lib->resize();
-                    $data = array(
-                        'emp_lastname' => ucwords($this->input->post('tf_emp_lastname')),
-                        'emp_firstname' => ucwords($this->input->post('tf_emp_firstname')),
-                        'emp_email' => $this->input->post('tf_emp_email'),
-                        'emp_contact' => $this->input->post('tf_emp_phone_no'),
-                        'emp_image_path' => $image
-                    );
-                } else {
-                    $data = array(
-                        'emp_lastname' => ucwords($this->input->post('tf_emp_lastname')),
-                        'emp_firstname' => ucwords($this->input->post('tf_emp_firstname')),
-                        'emp_email' => $this->input->post('tf_emp_email'),
-                        'emp_contact' => $this->input->post('tf_emp_phone_no')
-                    );
+        if ($this->form_validation->run()) {
+
+            $emp_id = $this->session->userdata('id');
+
+            // =====================
+            // Update basic info via API
+            // =====================
+            $updateData = array(
+                'emp_id'         => $emp_id,
+                'emp_lastname'   => ucwords($this->input->post('tf_emp_lastname')),
+                'emp_firstname'  => ucwords($this->input->post('tf_emp_firstname')),
+                'emp_email'      => $this->input->post('tf_emp_email'),
+                'emp_contact'    => $this->input->post('tf_emp_phone_no'),
+                // Keep existing values
+                'emp_username'   => $this->session->userdata('username'),
+                'emp_middlename' => '',
+                'position'       => '',
+                'department'     => '',
+                'gross_salary'   => 0
+            );
+            $this->callApi('updateEmployee', $updateData);
+
+            // =====================
+            // Upload image via API if provided
+            // =====================
+            if (!empty($_FILES['profile_pic']['name'])) {
+                $api_url = 'http://localhost/payroll-api/index.php?endpoint=uploadImage';
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $api_url);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, array(
+                    'image'  => new CURLFile(
+                        $_FILES['profile_pic']['tmp_name'],
+                        $_FILES['profile_pic']['type'],
+                        $_FILES['profile_pic']['name']
+                    ),
+                    'emp_id' => $emp_id
+                ));
+                $response = curl_exec($curl);
+                curl_close($curl);
+
+                $result = json_decode($response, true);
+                if ($result && $result['status'] == 'success') {
+                    // Update session image
+                    $this->session->set_userdata('image', $result['filename']);
                 }
-                $for_log = array(
-                    'username' => $this->session->userdata('username'),
-                    'action' => "Update Employee Profile",
-                    'user_type' => $this->session->userdata('type'),
-                    'time_and_date' => time()
-                );
-                $this->item_model->insertData("user_log", $for_log);
-                $this->item_model->updatedata("employees", $data, array('emp_id' => $this->session->userdata('id')));
-                redirect("profile/");
-            } else {
-                $this->profile_emp();
             }
-        } else {
-            redirect('payroll/');
-        }
-    }
 
+            // =====================
+            // Log the action
+            // =====================
+            $for_log = array(
+                'username'      => $this->session->userdata('username'),
+                'action'        => "Update Employee Profile",
+                'user_type'     => $this->session->userdata('type'),
+                'time_and_date' => time()
+            );
+            $this->item_model->insertData("user_log", $for_log);
+
+            redirect('employees/profile_emp');
+
+        } else {
+            $this->profile_emp();
+        }
+    } else {
+        redirect('payroll/');
+    }
+}
 }
