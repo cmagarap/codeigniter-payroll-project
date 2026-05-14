@@ -4,7 +4,13 @@
     <div class="col-md-4 col-xs-12">
         <div class="white-box" style = "background-color: #2f313e">
             <div class="user-bg">
-                <img width="100%" alt="employee" src="<?= $this->config->base_url(); ?>uploads_employee/<?= $employees->emp_image_path ?>">
+                <?php if (!empty($employees->emp_image_path)): ?>
+    <img src="http://localhost/payroll-api/uploads/<?= $employees->emp_image_path ?>" 
+         alt="Profile" width="100%" class="img-circle">
+<?php else: ?>
+    <img src="<?= $this->config->base_url() ?>uploads/default.png" 
+         alt="Profile" width="100%" class="img-circle">
+<?php endif; ?>
             </div>
             <div class="user-btm-box">
                 <h4 class = "text-white">User: <b style = "color: #65aad3"><?= $employees->emp_username ?></b></h4>

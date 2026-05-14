@@ -348,7 +348,7 @@ class Employees extends CI_Controller {
 
     # PROFILE OF THE EMPLOYEE WHO IS CURRENTLY LOGGED IN
     public function profile_emp() {
-            if($this->session->userdata('type') == "Employee") {
+        if($this->session->userdata('type') == "Employee") {
 
         // Use API
         $allEmployees = $this->callApi('getEmployees');
@@ -362,7 +362,10 @@ class Employees extends CI_Controller {
                 break;
             }
         }
-
+        
+        if ($account && !empty($account->emp_image_path)) {
+            $this->session->set_userdata('image', $account->emp_image_path);
+        }
         // Wrap in array as view expects $employees[0]
         $data = array(
             'title'      => 'Payroll | Profile',
@@ -370,7 +373,7 @@ class Employees extends CI_Controller {
             'side'       => 'Profile Page',
             'user'       => 'Employee',
             'employees'  => [$account],
-            'user_image' => $this->session->userdata('image')
+            'user_image' => $account->emp_image_path ?? ''
         );
         $this->load->view('includes/header', $data);
         $this->load->view('employees/profile_emp');
