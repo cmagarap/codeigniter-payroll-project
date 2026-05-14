@@ -47,19 +47,26 @@ class Employees extends CI_Controller {
         return $decrypted !== false ? $decrypted : $value;
     }
     public function index() {
-             if($this->session->userdata('type') == "Super Administrator" OR 
+    if($this->session->userdata('type') == "Super Administrator" OR 
        $this->session->userdata('type') == "Administrator") {
 
-        // Use API instead of direct DB
+        // Use API
         $allEmployees = $this->callApi('getEmployees');
 
-        $activeEmp = array_filter($allEmployees, function($emp) {
-            return $emp['emp_sys_status'] == 1;
-        });
+        $activeEmp = [];
+        $inactiveEmp = [];
 
-        $inactiveEmp = array_filter($allEmployees, function($emp) {
-            return $emp['emp_sys_status'] == 0;
-        });
+        if ($allEmployees) {
+            foreach ($allEmployees as $emp) {
+                // Convert array to object
+                $empObj = (object) $emp;
+                if ($empObj->emp_sys_status == 1) {
+                    $activeEmp[] = $empObj;
+                } else {
+                    $inactiveEmp[] = $empObj;
+                }
+            }
+        }
 
         $data = array(
             'title'        => 'Payroll | Employees',
@@ -76,7 +83,7 @@ class Employees extends CI_Controller {
     } else {
         redirect('employees/profile_emp');
     }
-    }
+}
 
     public function add_emp() {
         if($this->session->userdata('type') == "Super Administrator" OR $this->session->userdata('type') == "Administrator") {
@@ -123,8 +130,6 @@ class Employees extends CI_Controller {
             $this->form_validation->set_rules('tf_emp_position', 'Position', 'required');
             $this->form_validation->set_rules('tf_emp_dept', 'Department', 'required');
             $this->form_validation->set_message('required', 'Please fill out the {field} field.');
-            $this->form_validation->set_rules('g-recaptcha-response', 'recaptcha validation', 'required|callback_validate_captcha');
-            $this->form_validation->set_message('validate_captcha', 'Please check the the captcha form');
             #$this->form_validation->set_message('required', '{field} please fill up the following field');
             $this->form_validation->set_message('required', 'Please fill out the {field} field.');
 
