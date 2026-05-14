@@ -34,6 +34,25 @@ class Employeeapi extends CI_Controller {
             'endpoint' => $this->uri->uri_string()
         ]);
     }
+    private function _encrypt($value) {
+        if (!$value) return '';
+        $iv_length = openssl_cipher_iv_length($this->cipher);
+        $iv = openssl_random_pseudo_bytes($iv_length);
+        $encrypted = openssl_encrypt($value, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv);
+        return 'ENC:' . base64_encode($iv . $encrypted);
+    }
+    
+    private function _decrypt($value) {
+        if (!$value) return '';
+        if (substr($value, 0, 4) !== 'ENC:') return $value;
+        $data = base64_decode(substr($value, 4));
+        $iv_length = openssl_cipher_iv_length($this->cipher);
+        if (strlen($data) <= $iv_length) return $value;
+        $iv = substr($data, 0, $iv_length);
+        $encrypted = substr($data, $iv_length);
+        $decrypted = openssl_decrypt($encrypted, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv);
+        return $decrypted !== false ? $decrypted : $value;
+    }
 
     public function getEmployees() {
         $query = $this->db->get('employees');

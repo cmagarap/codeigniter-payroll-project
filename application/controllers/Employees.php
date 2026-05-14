@@ -2,6 +2,21 @@
 <?php
 date_default_timezone_set('Asia/Manila');
 class Employees extends CI_Controller {
+    private $api_base = 'http://localhost/payroll-api/index.php?endpoint';
+
+    private function callApi($endpoint, $data = null) {
+        $url = $this->api_base . '=' . $endpoint;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($data !== null) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        }
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($response, true);
+    }
     function __construct() {
         parent::__construct();
         $this->load->model('item_model');
@@ -32,51 +47,35 @@ class Employees extends CI_Controller {
         return $decrypted !== false ? $decrypted : $value;
     }
     public function index() {
-            if($this->session->userdata('type') == "Super Administrator" OR 
-           $this->session->userdata('type') == "Administrator") {
+             if($this->session->userdata('type') == "Super Administrator" OR 
+       $this->session->userdata('type') == "Administrator") {
 
-            $this->db->order_by('emp_lastname', 'ASC');
-            $activeEmp = $this->item_model->fetch('employees', array("emp_sys_status" => true));
-            $this->db->order_by('emp_lastname', 'ASC');
-            $inactiveEmp = $this->item_model->fetch('employees', array("emp_sys_status" => false));
+        // Use API instead of direct DB
+        $allEmployees = $this->callApi('getEmployees');
 
-            // Decrypt PII for active employees
-            if ($activeEmp) {
-                foreach ($activeEmp as &$emp) {
-                    $emp->emp_firstname  = $this->_decrypt($emp->emp_firstname);
-                    $emp->emp_lastname   = $this->_decrypt($emp->emp_lastname);
-                    $emp->emp_middlename = $this->_decrypt($emp->emp_middlename);
-                    $emp->emp_email      = $this->_decrypt($emp->emp_email);
-                    $emp->emp_contact    = $this->_decrypt($emp->emp_contact);
-                }
-            }
+        $activeEmp = array_filter($allEmployees, function($emp) {
+            return $emp['emp_sys_status'] == 1;
+        });
 
-            // Decrypt PII for inactive employees
-            if ($inactiveEmp) {
-                foreach ($inactiveEmp as &$emp) {
-                    $emp->emp_firstname  = $this->_decrypt($emp->emp_firstname);
-                    $emp->emp_lastname   = $this->_decrypt($emp->emp_lastname);
-                    $emp->emp_middlename = $this->_decrypt($emp->emp_middlename);
-                    $emp->emp_email      = $this->_decrypt($emp->emp_email);
-                    $emp->emp_contact    = $this->_decrypt($emp->emp_contact);
-                }
-            }
+        $inactiveEmp = array_filter($allEmployees, function($emp) {
+            return $emp['emp_sys_status'] == 0;
+        });
 
-            $data = array(
-                'title'        => 'Payroll | Employees',
-                'heading'      => 'Employee Data',
-                'side'         => 'Employees',
-                'user'         => $this->session->userdata('type'),
-                'user_image'   => $this->session->userdata('image'),
-                'active_emp'   => $activeEmp,
-                'inactive_emp' => $inactiveEmp
-            );
-            $this->load->view('includes/header', $data);
-            $this->load->view('employees/employees');
-            $this->load->view('includes/footer');
-        } else {
-            redirect('employees/profile_emp');
-        }
+        $data = array(
+            'title'        => 'Payroll | Employees',
+            'heading'      => 'Employee Data',
+            'side'         => 'Employees',
+            'user'         => $this->session->userdata('type'),
+            'user_image'   => $this->session->userdata('image'),
+            'active_emp'   => $activeEmp,
+            'inactive_emp' => $inactiveEmp
+        );
+        $this->load->view('includes/header', $data);
+        $this->load->view('employees/employees');
+        $this->load->view('includes/footer');
+    } else {
+        redirect('employees/profile_emp');
+    }
     }
 
     public function add_emp() {
@@ -189,7 +188,17 @@ class Employees extends CI_Controller {
                     'time_and_date' => time()
                 );
 
-                $this->item_model->insertData("employees", $data);
+                $result = $this->callApi('addEmployee', array(
+                    'emp_username'   => trim($user),
+                    'emp_firstname'  => trim(ucwords($this->input->post('tf_emp_firstname'))),
+                    'emp_lastname'   => trim(ucwords($this->input->post('tf_emp_lastname'))),
+                    'emp_middlename' => trim(ucwords($this->input->post('tf_emp_middlename'))),
+                    'emp_email'      => trim($this->input->post('tf_emp_email')),
+                    'emp_contact'    => trim($this->input->post('tf_emp_phone')),
+                    'position'       => trim(ucwords($this->input->post('tf_emp_position'))),
+                    'department'     => trim(ucwords($this->input->post('tf_emp_dept'))),
+                    'gross_salary'   => trim($this->input->post('tf_emp_gsalary'))
+                ));
 
                 # FOR PAYROLL VALUES:
                 $sss = $this->item_model->get_sss(($this->input->post('tf_emp_gsalary')));
@@ -339,33 +348,37 @@ class Employees extends CI_Controller {
 
     # PROFILE OF THE EMPLOYEE WHO IS CURRENTLY LOGGED IN
     public function profile_emp() {
-        if($this->session->userdata('type') == "Employee") {
-            $account = $this->item_model->fetch('employees', 
-                array('emp_id' => $this->session->userdata('id')));
+            if($this->session->userdata('type') == "Employee") {
 
-            if ($account && count($account) > 0) {
-                $account[0]->emp_firstname   = $this->_decrypt($account[0]->emp_firstname);
-                $account[0]->emp_lastname    = $this->_decrypt($account[0]->emp_lastname);
-                $account[0]->emp_middlename  = $this->_decrypt($account[0]->emp_middlename);
-                $account[0]->emp_email       = $this->_decrypt($account[0]->emp_email);
-                $account[0]->emp_contact     = $this->_decrypt($account[0]->emp_contact);
+        // Use API
+        $allEmployees = $this->callApi('getEmployees');
+        
+        // Find current employee
+        $account = null;
+        foreach ($allEmployees as $emp) {
+            if ($emp['emp_id'] == $this->session->userdata('id')) {
+                // Convert array to object
+                $account = (object) $emp;
+                break;
             }
-
-            $data = array(
-                'title'      => 'Payroll | Profile',
-                'heading'    => 'My Profile',
-                'side'       => 'Profile Page',
-                'user'       => 'Employee',
-                'employees'  => $account,
-                'user_image' => $this->session->userdata('image')
-            );
-            $this->load->view('includes/header', $data);
-            $this->load->view('employees/profile_emp');
-            $this->load->view('modal');
-            $this->load->view('includes/footer');
-        } else {
-            redirect('dashboard/');
         }
+
+        // Wrap in array as view expects $employees[0]
+        $data = array(
+            'title'      => 'Payroll | Profile',
+            'heading'    => 'My Profile',
+            'side'       => 'Profile Page',
+            'user'       => 'Employee',
+            'employees'  => [$account],
+            'user_image' => $this->session->userdata('image')
+        );
+        $this->load->view('includes/header', $data);
+        $this->load->view('employees/profile_emp');
+        $this->load->view('modal');
+        $this->load->view('includes/footer');
+    } else {
+        redirect('dashboard/');
+    }
     }
 
     public function edit_payroll_info() {
