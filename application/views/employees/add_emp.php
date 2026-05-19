@@ -119,14 +119,8 @@
                         <input type="file" name = "f_emp_profile_pic" class="form-control form-control-line">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-12">Recaptcha <font color = "red">*</font></label>
-                    <div class="g-recaptcha" data-sitekey="6LfuAzkUAAAAANp8G3aAozm0CKgQaG7I7S0bR2iP" >
-                    </div>
-                </div>
-                <!--<div class="form-group">
-                    <div class="g-recaptcha" data-sitekey="6LfuAzkUAAAAANp8G3aAozm0CKgQaG7I7S0bR2iP"></div>
-                </div>-->
+               
+                
                 <font color = "red">
                     <?php
                     if ($this->session->flashdata('error') != '') {

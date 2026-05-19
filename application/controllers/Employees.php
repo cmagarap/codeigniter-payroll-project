@@ -2,35 +2,88 @@
 <?php
 date_default_timezone_set('Asia/Manila');
 class Employees extends CI_Controller {
+    private $api_base = 'http://localhost/payroll-api/index.php?endpoint';
+
+    private function callApi($endpoint, $data = null) {
+        $url = $this->api_base . '=' . $endpoint;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($data !== null) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        }
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($response, true);
+    }
     function __construct() {
         parent::__construct();
         $this->load->model('item_model');
         $this->load->helper(array('string', 'form'));
         $this->load->library(array('form_validation', 'session', 'email'));
     }
-
-    public function index() {
-        if($this->session->userdata('type') == "Super Administrator" OR $this->session->userdata('type') == "Administrator") {
-            $this->db->order_by('emp_lastname', 'ASC');
-            $activeEmp = $this->item_model->fetch('employees', array("emp_sys_status" => true));
-            $this->db->order_by('emp_lastname', 'ASC');
-            $inactiveEmp = $this->item_model->fetch('employees', array("emp_sys_status" => false));
-            $data = array(
-                'title' => 'Payroll | Employees',
-                'heading' => 'Employee Data',
-                'side' => 'Employees',
-                'user' => $this->session->userdata('type'),
-                'user_image' => $this->session->userdata('image'),
-                'active_emp' => $activeEmp,
-                'inactive_emp' => $inactiveEmp
-            );
-            $this->load->view('includes/header', $data);
-            $this->load->view('employees/employees');
-            $this->load->view('includes/footer');
-        } else {
-            redirect('employees/profile_emp');
-        }
+    private function _encrypt($value) {
+        $cipher = 'AES-256-CBC';
+        $key = 'P@yr0llS3cur3K3y#EmpMgmt2026!!X';
+        if (!$value) return '';
+        $iv_length = openssl_cipher_iv_length($cipher);
+        $iv = openssl_random_pseudo_bytes($iv_length);
+        $encrypted = openssl_encrypt($value, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        return 'ENC:' . base64_encode($iv . $encrypted);
     }
+
+    private function _decrypt($value) {
+        $cipher = 'AES-256-CBC';
+        $key = 'P@yr0llS3cur3K3y#EmpMgmt2026!!X';
+        if (!$value) return '';
+        if (substr($value, 0, 4) !== 'ENC:') return $value;
+        $data = base64_decode(substr($value, 4));
+        $iv_length = openssl_cipher_iv_length($cipher);
+        if (strlen($data) <= $iv_length) return $value;
+        $iv = substr($data, 0, $iv_length);
+        $encrypted = substr($data, $iv_length);
+        $decrypted = openssl_decrypt($encrypted, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        return $decrypted !== false ? $decrypted : $value;
+    }
+    public function index() {
+    if($this->session->userdata('type') == "Super Administrator" OR 
+       $this->session->userdata('type') == "Administrator") {
+
+        // Use API
+        $allEmployees = $this->callApi('getEmployees');
+
+        $activeEmp = [];
+        $inactiveEmp = [];
+
+        if ($allEmployees) {
+            foreach ($allEmployees as $emp) {
+                // Convert array to object
+                $empObj = (object) $emp;
+                if ($empObj->emp_sys_status == 1) {
+                    $activeEmp[] = $empObj;
+                } else {
+                    $inactiveEmp[] = $empObj;
+                }
+            }
+        }
+
+        $data = array(
+            'title'        => 'Payroll | Employees',
+            'heading'      => 'Employee Data',
+            'side'         => 'Employees',
+            'user'         => $this->session->userdata('type'),
+            'user_image'   => $this->session->userdata('image'),
+            'active_emp'   => $activeEmp,
+            'inactive_emp' => $inactiveEmp
+        );
+        $this->load->view('includes/header', $data);
+        $this->load->view('employees/employees');
+        $this->load->view('includes/footer');
+    } else {
+        redirect('employees/profile_emp');
+    }
+}
 
     public function add_emp() {
         if($this->session->userdata('type') == "Super Administrator" OR $this->session->userdata('type') == "Administrator") {
@@ -77,8 +130,6 @@ class Employees extends CI_Controller {
             $this->form_validation->set_rules('tf_emp_position', 'Position', 'required');
             $this->form_validation->set_rules('tf_emp_dept', 'Department', 'required');
             $this->form_validation->set_message('required', 'Please fill out the {field} field.');
-            $this->form_validation->set_rules('g-recaptcha-response', 'recaptcha validation', 'required|callback_validate_captcha');
-            $this->form_validation->set_message('validate_captcha', 'Please check the the captcha form');
             #$this->form_validation->set_message('required', '{field} please fill up the following field');
             $this->form_validation->set_message('required', 'Please fill out the {field} field.');
 
@@ -116,17 +167,17 @@ class Employees extends CI_Controller {
                 }
                 $user = $this->input->post('tf_emp_username');
                 $data = array(
-                    'emp_username' => trim($user),
-                    'emp_password' => password_hash($this->input->post('pf_emp_password'), PASSWORD_BCRYPT),
-                    'emp_lastname' => trim(ucwords($this->input->post('tf_emp_lastname'))),
-                    'emp_firstname' => trim(ucwords($this->input->post('tf_emp_firstname'))),
-                    'emp_middlename' => trim(ucwords($this->input->post('tf_emp_middlename'))),
-                    'emp_email' => trim($this->input->post('tf_emp_email')),
-                    'emp_contact' => trim($this->input->post('tf_emp_phone')),
-                    'tin_num' => trim($this->input->post('tf_emp_tin')),
-                    'sss_num' => trim($this->input->post('tf_emp_sss')),
-                    'pagibig_num' => trim($this->input->post('tf_emp_pagibig')),
-                    'philhealth_num' => trim($this->input->post('tf_emp_phealth')),
+                    'emp_username'   => trim($user),
+                    'emp_password'   => password_hash($this->input->post('pf_emp_password'), PASSWORD_BCRYPT),
+                    'emp_lastname'   => $this->_encrypt(trim(ucwords($this->input->post('tf_emp_lastname')))),
+                    'emp_firstname'  => $this->_encrypt(trim(ucwords($this->input->post('tf_emp_firstname')))),
+                    'emp_middlename' => $this->_encrypt(trim(ucwords($this->input->post('tf_emp_middlename')))),
+                    'emp_email'      => $this->_encrypt(trim($this->input->post('tf_emp_email'))),
+                    'emp_contact'    => $this->_encrypt(trim($this->input->post('tf_emp_phone'))),
+                    'tin_num'        => $this->_encrypt(trim($this->input->post('tf_emp_tin'))),
+                    'sss_num'        => $this->_encrypt(trim($this->input->post('tf_emp_sss'))),
+                    'pagibig_num'    => $this->_encrypt(trim($this->input->post('tf_emp_pagibig'))),
+                    'philhealth_num' => $this->_encrypt(trim($this->input->post('tf_emp_phealth'))),
                     'status' => trim($this->input->post('s_status')),
                     'gross_salary' => trim($this->input->post('tf_emp_gsalary')),
                     'position' => trim(ucwords($this->input->post('tf_emp_position'))),
@@ -142,7 +193,17 @@ class Employees extends CI_Controller {
                     'time_and_date' => time()
                 );
 
-                $this->item_model->insertData("employees", $data);
+                $result = $this->callApi('addEmployee', array(
+                    'emp_username'   => trim($user),
+                    'emp_firstname'  => trim(ucwords($this->input->post('tf_emp_firstname'))),
+                    'emp_lastname'   => trim(ucwords($this->input->post('tf_emp_lastname'))),
+                    'emp_middlename' => trim(ucwords($this->input->post('tf_emp_middlename'))),
+                    'emp_email'      => trim($this->input->post('tf_emp_email')),
+                    'emp_contact'    => trim($this->input->post('tf_emp_phone')),
+                    'position'       => trim(ucwords($this->input->post('tf_emp_position'))),
+                    'department'     => trim(ucwords($this->input->post('tf_emp_dept'))),
+                    'gross_salary'   => trim($this->input->post('tf_emp_gsalary'))
+                ));
 
                 # FOR PAYROLL VALUES:
                 $sss = $this->item_model->get_sss(($this->input->post('tf_emp_gsalary')));
@@ -293,22 +354,39 @@ class Employees extends CI_Controller {
     # PROFILE OF THE EMPLOYEE WHO IS CURRENTLY LOGGED IN
     public function profile_emp() {
         if($this->session->userdata('type') == "Employee") {
-            $account = $this->item_model->fetch('employees', array('emp_id' => $this->session->userdata('id')));
-            $data = array(
-                'title' => 'Payroll | Profile',
-                'heading' => 'My Profile',
-                'side' => 'Profile Page',
-                'user' => 'Employee',
-                'employees' => $account,
-                'user_image' => $this->session->userdata('image')
-            );
-            $this->load->view('includes/header', $data);
-            $this->load->view('employees/profile_emp');
-            $this->load->view('modal');
-            $this->load->view('includes/footer');
-        } else {
-            redirect('dashboard/');
+
+        // Use API
+        $allEmployees = $this->callApi('getEmployees');
+        
+        // Find current employee
+        $account = null;
+        foreach ($allEmployees as $emp) {
+            if ($emp['emp_id'] == $this->session->userdata('id')) {
+                // Convert array to object
+                $account = (object) $emp;
+                break;
+            }
         }
+        
+        if ($account && !empty($account->emp_image_path)) {
+            $this->session->set_userdata('image', $account->emp_image_path);
+        }
+        // Wrap in array as view expects $employees[0]
+        $data = array(
+            'title'      => 'Payroll | Profile',
+            'heading'    => 'My Profile',
+            'side'       => 'Profile Page',
+            'user'       => 'Employee',
+            'employees'  => [$account],
+            'user_image' => $account->emp_image_path ?? ''
+        );
+        $this->load->view('includes/header', $data);
+        $this->load->view('employees/profile_emp');
+        $this->load->view('modal');
+        $this->load->view('includes/footer');
+    } else {
+        redirect('dashboard/');
+    }
     }
 
     public function edit_payroll_info() {
@@ -369,59 +447,81 @@ class Employees extends CI_Controller {
         }
     }
     public function update_profile() {
-        if($this->session->userdata('type') == "Employee") {
-            $this->form_validation->set_rules('tf_emp_lastname', 'Last name', 'required');
-            $this->form_validation->set_rules('tf_emp_firstname', 'First name', 'required');
-            $this->form_validation->set_rules('tf_emp_email', 'Email', 'required|valid_email');
-            $this->form_validation->set_rules('tf_emp_phone_no', 'Phone No.', 'required|numeric');
-            $this->form_validation->set_message('required', 'Please fill out the {field} field.');
+    if($this->session->userdata('type') == "Employee") {
+        $this->form_validation->set_rules('tf_emp_lastname', 'Last name', 'required');
+        $this->form_validation->set_rules('tf_emp_firstname', 'First name', 'required');
+        $this->form_validation->set_rules('tf_emp_email', 'Email', 'required|valid_email');
+        $this->form_validation->set_rules('tf_emp_phone_no', 'Phone No.', 'required|numeric');
+        $this->form_validation->set_message('required', 'Please fill out the {field} field.');
 
-            if ($this->form_validation->run()) {
-                $config['upload_path'] = './uploads_employee/';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = 0;
-                $this->load->library('upload', $config);
-                # Check for image input
-                if ($this->upload->do_upload('profile_pic') == TRUE) {
-                    $image = $this->upload->data('file_name');
-                    $config2['image_library'] = 'gd2';
-                    $config2['source_image'] = './uploads_employee/' . $image;
-                    $config2['create_thumb'] = TRUE;
-                    $config2['maintain_ratio'] = TRUE;
-                    $config2['width'] = 75;
-                    $config2['height'] = 50;
-                    $this->load->library('image_lib', $config2);
-                    $this->image_lib->resize();
-                    $data = array(
-                        'emp_lastname' => ucwords($this->input->post('tf_emp_lastname')),
-                        'emp_firstname' => ucwords($this->input->post('tf_emp_firstname')),
-                        'emp_email' => $this->input->post('tf_emp_email'),
-                        'emp_contact' => $this->input->post('tf_emp_phone_no'),
-                        'emp_image_path' => $image
-                    );
-                } else {
-                    $data = array(
-                        'emp_lastname' => ucwords($this->input->post('tf_emp_lastname')),
-                        'emp_firstname' => ucwords($this->input->post('tf_emp_firstname')),
-                        'emp_email' => $this->input->post('tf_emp_email'),
-                        'emp_contact' => $this->input->post('tf_emp_phone_no')
-                    );
+        if ($this->form_validation->run()) {
+
+            $emp_id = $this->session->userdata('id');
+
+            // =====================
+            // Update basic info via API
+            // =====================
+            $updateData = array(
+                'emp_id'         => $emp_id,
+                'emp_lastname'   => ucwords($this->input->post('tf_emp_lastname')),
+                'emp_firstname'  => ucwords($this->input->post('tf_emp_firstname')),
+                'emp_email'      => $this->input->post('tf_emp_email'),
+                'emp_contact'    => $this->input->post('tf_emp_phone_no'),
+                // Keep existing values
+                'emp_username'   => $this->session->userdata('username'),
+                'emp_middlename' => '',
+                'position'       => '',
+                'department'     => '',
+                'gross_salary'   => 0
+            );
+            $this->callApi('updateEmployee', $updateData);
+
+            // =====================
+            // Upload image via API if provided
+            // =====================
+            if (!empty($_FILES['profile_pic']['name'])) {
+                $api_url = 'http://localhost/payroll-api/index.php?endpoint=uploadImage';
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $api_url);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, array(
+                    'image'  => new CURLFile(
+                        $_FILES['profile_pic']['tmp_name'],
+                        $_FILES['profile_pic']['type'],
+                        $_FILES['profile_pic']['name']
+                    ),
+                    'emp_id' => $emp_id
+                ));
+                $response = curl_exec($curl);
+                curl_close($curl);
+
+                $result = json_decode($response, true);
+                if ($result && $result['status'] == 'success') {
+                    // Update session image
+                    $this->session->set_userdata('image', $result['filename']);
                 }
-                $for_log = array(
-                    'username' => $this->session->userdata('username'),
-                    'action' => "Update Employee Profile",
-                    'user_type' => $this->session->userdata('type'),
-                    'time_and_date' => time()
-                );
-                $this->item_model->insertData("user_log", $for_log);
-                $this->item_model->updatedata("employees", $data, array('emp_id' => $this->session->userdata('id')));
-                redirect("profile/");
-            } else {
-                $this->profile_emp();
             }
-        } else {
-            redirect('payroll/');
-        }
-    }
 
+            // =====================
+            // Log the action
+            // =====================
+            $for_log = array(
+                'username'      => $this->session->userdata('username'),
+                'action'        => "Update Employee Profile",
+                'user_type'     => $this->session->userdata('type'),
+                'time_and_date' => time()
+            );
+            $this->item_model->insertData("user_log", $for_log);
+
+            redirect('employees/profile_emp');
+
+        } else {
+            $this->profile_emp();
+        }
+    } else {
+        redirect('payroll/');
+    }
+}
 }

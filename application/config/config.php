@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/payrollproject';
+$config['base_url'] = 'http://localhost/codeigniter-payroll-project/';
 
 /*
 |--------------------------------------------------------------------------
@@ -324,7 +324,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'f_.CQH>~ZJV|QfJ';
+$config['encryption_key'] = 'P@yr0llS3cur3K3y#EmpMgmt2026!!X';
 
 /*
 |--------------------------------------------------------------------------

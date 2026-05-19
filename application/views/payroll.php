@@ -1,4 +1,18 @@
-<?php if($this->session->userdata('type') == "Super Administrator" OR $this->session->userdata('type') == "Administrator") { ?>
+<?php
+function decryptField($value) {
+    $cipher = 'AES-256-CBC';
+    $key = 'P@yr0llS3cur3K3y#EmpMgmt2026!!X';
+    if (!$value) return '';
+    if (substr($value, 0, 4) !== 'ENC:') return $value;
+    $data = base64_decode(substr($value, 4));
+    $iv_length = openssl_cipher_iv_length($cipher);
+    if (strlen($data) <= $iv_length) return $value;
+    $iv = substr($data, 0, $iv_length);
+    $encrypted = substr($data, $iv_length);
+    $decrypted = openssl_decrypt($encrypted, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    return $decrypted !== false ? $decrypted : $value;
+}
+?><?php if($this->session->userdata('type') == "Super Administrator" OR $this->session->userdata('type') == "Administrator") { ?>
 <div class="row">
     <div class="col-sm-12">
         <div class="white-box">
@@ -64,7 +78,7 @@
                     </tr>
                     <tr>
                         <td><strong style = "color: #65aad3">Employee Name</strong></td>
-                        <td class="active"><?= $info->emp_lastname.", ".$info->emp_firstname." ".$info->emp_middlename ?></td>
+                        <td class="active"><?= decryptField($info->emp_lastname).", ".decryptField($info->emp_firstname)." ".decryptField($info->emp_middlename) ?></td>
                     </tr>
                     <tr>
                         <td><strong style = "color: #65aad3">Gross Income</strong></td>
